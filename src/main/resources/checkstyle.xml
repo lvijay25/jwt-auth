@@ -24,19 +24,16 @@
             <property name="format" value="abc|xyz"/> <!-- Flags literal strings containing 'abc' or 'xyz' -->
             <property name="ignoreCase" value="true"/>
         </module>
+        <!-- Left curly on next line -->
+        <module name="LeftCurly">
+            <property name="option" value="nl"/>
+        </module>
+        <!-- Right curly on next line -->
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+        </module>
     </module>
-
     <!-- Checks that all packages have package documentation -->
     <module name="JavadocPackage"/>
-    <!-- Left curly on next line -->
-    <module name="LeftCurly">
-        <property name="option" value="nl"/>
-    </module>
-
-    <!-- Right curly on next line -->
-    <module name="RightCurly">
-        <property name="option" value="alone"/>
-    </module>
-
 </module>
 
