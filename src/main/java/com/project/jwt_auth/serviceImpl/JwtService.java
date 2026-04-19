@@ -2,7 +2,6 @@ package com.project.jwt_auth.serviceImpl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.lang.Function;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.*;
 
@@ -47,17 +47,15 @@ public class JwtService
         return jwtExpiration;
     }
 
-    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long jwtExpiration)
-    {
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long jwtExpiration) {
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.ES256)
+                .claims(extraClaims) // Replaces setClaims()
+                .subject(userDetails.getUsername()) // Replaces setSubject()
+                .issuedAt(new Date(System.currentTimeMillis())) // Replaces setIssuedAt()
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration)) // Replaces setExpiration()
+                .signWith(getSignInKey()) // Replaces signWith(key, algorithm)
                 .compact();
-
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails)
@@ -79,13 +77,11 @@ public class JwtService
 
     private Claims extractAllClaims(String token)
     {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
+        return Jwts.parser()
+                .verifyWith((SecretKey) getSignInKey()) // Replaces setSigningKey()
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
-
+                .parseSignedClaims(token)   // Replaces parseClaimsJws()
+                .getPayload();              // Replaces getBody()
     }
 
     private Key getSignInKey()
