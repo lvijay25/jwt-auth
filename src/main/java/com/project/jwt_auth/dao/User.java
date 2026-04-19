@@ -2,9 +2,7 @@ package com.project.jwt_auth.dao;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -58,6 +56,7 @@ public class User implements UserDetails
     public String getUsername() {
         return username;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -77,6 +76,5 @@ public class User implements UserDetails
     public boolean isEnabled() {
         return true;
     }
-
 
 }
